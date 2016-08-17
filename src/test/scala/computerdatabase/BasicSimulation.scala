@@ -19,9 +19,9 @@ class BasicSimulation extends Simulation {
   val firstScn = scn.inject(
     /*rampUsers(8000) over (10 seconds),
     nothingFor(5 seconds),*/
-    constantUsersPerSec(2000) during (20 seconds),
+    constantUsersPerSec(200) during (20 seconds),
     nothingFor(5 seconds),
-    constantUsersPerSec(4000) during (20 seconds),
+    constantUsersPerSec(400) during (20 seconds),
     nothingFor(5 seconds)
     /*constantUsersPerSec(6000) during (20 seconds),
     nothingFor(5 seconds),
