@@ -17,17 +17,17 @@ class BasicSimulation extends Simulation {
   val scn = scenario("Load test").exec(AdRequest.adRequest)
 
   val firstScn = scn.inject(
-    rampUsers(8000) over (10 seconds),
-    nothingFor(5 seconds),
+    /*rampUsers(8000) over (10 seconds),
+    nothingFor(5 seconds),*/
     constantUsersPerSec(2000) during (20 seconds),
     nothingFor(5 seconds),
     constantUsersPerSec(4000) during (20 seconds),
-    nothingFor(5 seconds),
-    constantUsersPerSec(6000) during (20 seconds),
+    nothingFor(5 seconds)
+    /*constantUsersPerSec(6000) during (20 seconds),
     nothingFor(5 seconds),
     constantUsersPerSec(8000) during (20 seconds),
     nothingFor(5 seconds),
-    constantUsersPerSec(10000) during (20 seconds)
+    constantUsersPerSec(10000) during (20 seconds)*/
   ).protocols(httpConf)
 
   setUp(
