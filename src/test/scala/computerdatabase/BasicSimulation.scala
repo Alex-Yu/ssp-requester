@@ -4,30 +4,43 @@ import io.gatling.core.Predef._
 import io.gatling.http.Predef._
 
 import scala.io.Source
+import scala.util.Random
+import Lib._
 
 class BasicSimulation extends Simulation {
 
   val httpConf = http
-    .baseURL("http://localhost:8080")
+    .baseURL("http://127.0.0.1:8080")
+//    .baseURL("http://209.205.218.34:8080")
     .contentTypeHeader("application/json")
 
-  val feeder = getFeeder("output.log").circular
+  val feeder = getFeeder.circular
 
   val scn = scenario("Load test")
     .feed(feeder)
-    .repeat(100) (
+    .repeat(1)(
       exec(http("sample request")
-        .post("/bidder")
+        .post("/bidder?sid=${sid}")
         .body(
           StringBody("${json}")
         )))
 
-  setUp(scn.inject(atOnceUsers(1)).protocols(httpConf))
+  setUp(scn.inject(atOnceUsers(100)).protocols(httpConf))
 
-  def getFeeder(fileName: String): Array[Map[String, String]] = {
-    val source = Source.fromFile(fileName).getLines()
 
-    source.map( s => Map("json" -> s) ).toArray
-  }
+}
+
+object Lib {
+
+  private val r = Random
+
+  private val adRequests = Source.fromFile("output.log").getLines()
+
+  private val sources = Source.fromFile("sources.txt").getLines().filter(_.nonEmpty).toArray
+  private val sourcesQtty = sources.length
+
+  def getFeeder = adRequests.map( s => Map("json" -> s, "sid" -> getRandomSource) ).toArray
+
+  def getRandomSource = sources(r.nextInt(sourcesQtty))
 
 }
