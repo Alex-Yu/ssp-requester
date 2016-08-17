@@ -19,13 +19,13 @@ class BasicSimulation extends Simulation {
   val firstScn = scn.inject(
     /*rampUsers(8000) over (10 seconds),
     nothingFor(5 seconds),*/
-    constantUsersPerSec(2000) during (20 seconds),
-    nothingFor(10 seconds),
+    constantUsersPerSec(2000) during (60 seconds)
+    /*nothingFor(10 seconds),
     constantUsersPerSec(3000) during (20 seconds),
     nothingFor(10 seconds),
     constantUsersPerSec(4000) during (20 seconds),
     nothingFor(10 seconds),
-    constantUsersPerSec(5000) during (20 seconds)
+    constantUsersPerSec(5000) during (20 seconds)*/
   ).protocols(httpConf)
 
   setUp(
