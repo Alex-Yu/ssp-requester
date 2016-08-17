@@ -10,8 +10,8 @@ import scala.util.Random
 class BasicSimulation extends Simulation {
 
   val httpConf = http
-    .baseURL("http://127.0.0.1:8080")
-    //    .baseURL("http://209.205.218.34:8080")
+//    .baseURL("http://127.0.0.1:8080")
+        .baseURL("http://209.205.218.34:8080")
     .contentTypeHeader("application/json")
 
   val scn = scenario("Load test").exec(AdRequest.adRequest)
