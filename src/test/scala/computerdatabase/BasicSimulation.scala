@@ -1,12 +1,11 @@
 package computerdatabase
 
+import computerdatabase.Lib._
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
-
+import scala.concurrent.duration._
 import scala.io.Source
 import scala.util.Random
-import Lib._
-import com.sun.org.apache.xalan.internal.utils.XMLSecurityManager.Limit
 
 class BasicSimulation extends Simulation {
 
@@ -15,20 +14,38 @@ class BasicSimulation extends Simulation {
     //    .baseURL("http://209.205.218.34:8080")
     .contentTypeHeader("application/json")
 
+  val scn = scenario("Load test").exec(AdRequest.adRequest)
+
+  val firstScn = scn.inject(
+    rampUsers(8000) over (10 seconds),
+    nothingFor(5 seconds),
+    constantUsersPerSec(2000) during (20 seconds),
+    nothingFor(5 seconds),
+    constantUsersPerSec(4000) during (20 seconds),
+    nothingFor(5 seconds),
+    constantUsersPerSec(6000) during (20 seconds),
+    nothingFor(5 seconds),
+    constantUsersPerSec(8000) during (20 seconds),
+    nothingFor(5 seconds),
+    constantUsersPerSec(10000) during (20 seconds)
+  ).protocols(httpConf)
+
+  setUp(
+    firstScn
+  )
+
+
+}
+
+object AdRequest {
   val feeder = getFeeder().random
 
-  val scn = scenario("Load test")
-    .feed(feeder)
-    .repeat(1)(
-      exec(http("sample request")
-        .post("/bidder?sid=${sid}")
-        .body(
-          StringBody("${json}")
-        )))
-
-  setUp(scn.inject(atOnceUsers(100)).protocols(httpConf))
-
-
+  val adRequest = feed(feeder)
+    .exec(http("sample request")
+      .post("/bidder?sid=${sid}")
+      .body(
+        StringBody("${json}")
+      ))
 }
 
 object Lib {

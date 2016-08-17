@@ -14,8 +14,8 @@ object Converter extends App {
   var i = 0
   try {
 
-    source = Some(Source.fromFile("sample.log"))
-    writer = Some(new BufferedWriter(new FileWriter("output.log")))
+    source = Some(Source.fromFile("rtb_cuted.log"))
+    writer = Some(new BufferedWriter(new FileWriter("output_all.log")))
 
     for {
       s <- source
@@ -25,13 +25,15 @@ object Converter extends App {
 
         if (i % 100000 == 0) println(s"$i converted")
         i += 1
-        val cleaned =
-          s.split('|').last
-            .replaceAll("^\"", "")
-            .replaceAll("\"$", "")
-            .replaceAll("\\\\x22", "\"")
-            .replaceAll("\\\\x[0-9A-Fa-f]{2}", "")
-        w.write(cleaned + "\n")
+        if (!s.matches(".*banner.*")) {
+          val cleaned =
+            s.split('|').last
+              .replaceAll("^\"", "")
+              .replaceAll("\"$", "")
+              .replaceAll("\\\\x22", "\"")
+              .replaceAll("\\\\x[0-9A-Fa-f]{2}", "")
+          w.write(cleaned + "\n")
+        }
       }
     }
   } finally {
