@@ -23,7 +23,7 @@ class BasicSimulation extends Simulation {
     .inject(
     rampUsers(500) over (10 seconds),
     nothingFor(5 seconds),
-    constantUsersPerSec(5000) during (60 seconds)/*,
+    constantUsersPerSec(3000) during (60 seconds)/*,
     nothingFor(10 seconds),
     constantUsersPerSec(7000) during (60 seconds),
     nothingFor(10 seconds),
@@ -57,7 +57,7 @@ object Lib {
   private val sources = Source.fromFile("sources.txt").getLines().filter(_.nonEmpty).toArray
   private val sourcesQtty = sources.length
 
-  def getFeeder(limit: Int = 10000) =
+  def getFeeder(limit: Int = 1000) =
     (1 to limit) map ( _ => Map("json" -> adRequests.next(), "sid" -> getRandomSource) ) toArray
 
   def getRandomSource = sources(r.nextInt(sourcesQtty))
