@@ -16,7 +16,7 @@ class BasicSimulation extends Simulation {
     .maxConnectionsPerHost(300)
     .shareConnections
 
-  val rps = 10000
+  val rps = 9000
 
 //  val firstScn = scenario("load").exec(Array.fill(1000)(AdRequest.adRequest))
   val firstScn = scenario("load").exec(AdRequest.adRequest)
