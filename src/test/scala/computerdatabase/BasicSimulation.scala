@@ -23,13 +23,11 @@ class BasicSimulation extends Simulation {
     .inject(
     rampUsers(500) over (10 seconds),
     nothingFor(5 seconds),
-    constantUsersPerSec(5000) during (60 seconds)
-    /*nothingFor(10 seconds),
-    constantUsersPerSec(3000) during (20 seconds),
+    constantUsersPerSec(5000) during (60 seconds),
     nothingFor(10 seconds),
-    constantUsersPerSec(4000) during (20 seconds),
+    constantUsersPerSec(7000) during (60 seconds),
     nothingFor(10 seconds),
-    constantUsersPerSec(5000) during (20 seconds)*/
+    constantUsersPerSec(10000) during (60 seconds)
   ).protocols(httpConf)
 
   setUp(
