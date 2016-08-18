@@ -3,6 +3,7 @@ package computerdatabase
 import computerdatabase.Lib._
 import io.gatling.core.Predef._
 import io.gatling.http.Predef._
+
 import scala.concurrent.duration._
 import scala.io.Source
 import scala.util.Random
@@ -16,7 +17,8 @@ class BasicSimulation extends Simulation {
     .maxConnectionsPerHost(300)
     .shareConnections
 
-  val rps = 9000
+  val rps = 8000
+  val extra = rps + 1000
   val halfRps = rps / 2
   val quartRps = rps / 4
 
@@ -31,6 +33,9 @@ class BasicSimulation extends Simulation {
       nothingFor(10 seconds),
       rampUsersPerSec(halfRps) to rps during (10 seconds),
       constantUsersPerSec(rps) during (50 seconds),
+      nothingFor(10 seconds),
+      rampUsersPerSec(rps) to extra during (10 seconds),
+      constantUsersPerSec(extra) during (20 seconds),
       nothingFor(10 seconds)
     ).protocols(httpConf)
 
