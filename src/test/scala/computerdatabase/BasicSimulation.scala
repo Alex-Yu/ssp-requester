@@ -14,12 +14,13 @@ class BasicSimulation extends Simulation {
         .baseURL("http://209.205.218.34:8080")
     .contentTypeHeader("application/json")
 
-  val scn = scenario("Load test").exec(AdRequest.adRequest)
 
-  val firstScn = scn.inject(
+
+  val firstScn = scenario("100 connections / 1000rps").exec(Array.fill(1000)(AdRequest.adRequest))
+    .inject(
     /*rampUsers(8000) over (10 seconds),
     nothingFor(5 seconds),*/
-    constantUsersPerSec(2000) during (60 seconds)
+    constantUsersPerSec(100) during (60 seconds)
     /*nothingFor(10 seconds),
     constantUsersPerSec(3000) during (20 seconds),
     nothingFor(10 seconds),
