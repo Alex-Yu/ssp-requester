@@ -21,9 +21,8 @@ class BasicSimulation extends Simulation {
 //  val firstScn = scenario("load").exec(Array.fill(1000)(AdRequest.adRequest))
   val firstScn = scenario("load").exec(AdRequest.adRequest)
     .inject(
-    rampUsers(500) over (10 seconds),
-    nothingFor(5 seconds),
-    constantUsersPerSec(rps) during (60 seconds)/*,
+    rampUsersPerSec(1) to rps during (10 seconds),
+    constantUsersPerSec(rps) during (50 seconds)/*,
     nothingFor(10 seconds),
     constantUsersPerSec(7000) during (60 seconds),
     nothingFor(10 seconds),
@@ -33,8 +32,8 @@ class BasicSimulation extends Simulation {
   setUp(
     firstScn
   ).throttle(
-    reachRps(rps) in (5 seconds),
-    holdFor(55 seconds)
+    reachRps(rps) in (10 seconds),
+    holdFor(50 seconds)
   )
 
 
