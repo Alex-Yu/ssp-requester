@@ -13,14 +13,17 @@ class BasicSimulation extends Simulation {
 //    .baseURL("http://127.0.0.1:8080")
         .baseURL("http://209.205.218.34:8080")
     .contentTypeHeader("application/json")
+    .maxConnectionsPerHost(300)
+    .shareConnections
 
 
 
-  val firstScn = scenario("100 connections / 1000rps").exec(Array.fill(1000)(AdRequest.adRequest))
+//  val firstScn = scenario("load").exec(Array.fill(1000)(AdRequest.adRequest))
+  val firstScn = scenario("load").exec(AdRequest.adRequest)
     .inject(
     /*rampUsers(8000) over (10 seconds),
     nothingFor(5 seconds),*/
-    constantUsersPerSec(100) during (60 seconds)
+    constantUsersPerSec(2000) during (60 seconds)
     /*nothingFor(10 seconds),
     constantUsersPerSec(3000) during (20 seconds),
     nothingFor(10 seconds),
