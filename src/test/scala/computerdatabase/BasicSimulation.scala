@@ -12,7 +12,8 @@ class BasicSimulation extends Simulation {
 
   val httpConf = http
     //    .baseURL("http://127.0.0.1:8080")
-    .baseURL("http://209.205.218.34:8080")
+//    .baseURL("http://209.205.218.34:8080")
+    .baseURL("http://209.205.219.218:8080")
     .contentTypeHeader("application/json")
     .maxConnectionsPerHost(300)
     .shareConnections
