@@ -32,11 +32,11 @@ class BasicSimulation extends Simulation {
       constantUsersPerSec(quartRps) during (50 seconds),
       rampUsersPerSec(quartRps) to halfRps during (10 seconds),
       constantUsersPerSec(halfRps) during (50 seconds),
-      rampUsersPerSec(halfRps) to rps during (10 seconds),
-      constantUsersPerSec(rps) during (50 seconds),
       rampUsersPerSec(halfRps) to hqRps during (10 seconds),
       constantUsersPerSec(hqRps) during (50 seconds),
-      rampUsersPerSec(hqRps) to extra during (10 seconds),
+      rampUsersPerSec(hqRps) to rps during (10 seconds),
+      constantUsersPerSec(rps) during (50 seconds),
+      rampUsersPerSec(rps) to extra during (10 seconds),
       constantUsersPerSec(extra) during (20 seconds),
       nothingFor(5 seconds)
     ).protocols(httpConf)
