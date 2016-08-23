@@ -19,8 +19,8 @@ class BasicSimulation extends Simulation {
     .maxConnectionsPerHost(300)
     .shareConnections
 
-  val rps = 26000
-  val extra = rps + 1000
+  val rps = 50000
+  val extra = rps * 1.05
   val halfRps = rps / 2
   val quartRps = rps / 4
   val hqRps = halfRps + quartRps
