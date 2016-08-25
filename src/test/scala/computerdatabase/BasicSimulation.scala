@@ -11,8 +11,8 @@ import scala.util.Random
 class BasicSimulation extends Simulation {
 
   val httpConf = http
-    .baseURL("http://localhost:8080")
-    //    .baseURL("http://209.205.219.186:80")
+    //    .baseURL("http://localhost:8080")
+    .baseURL("http://209.205.219.186:80")
     .contentTypeHeader("application/json")
     .maxConnectionsPerHost(300)
     .shareConnections
