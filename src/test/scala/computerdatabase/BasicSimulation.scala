@@ -47,11 +47,13 @@ object AdRequest {
   val feeder = getFeeder().random
 
   val adRequest = feed(feeder)
-    .exec(http("sample request")
+    .exec(http("RTB request")
       .post("/bidder?sid=${sid}")
       .body(
         StringBody("${json}")
       ))
+    .exec(http("non-RTB request")
+      .post("/bidder?&sid=${sid}&pubId=15&pubName=test&domain=google.com&ua=Mozilla/6.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_10_4)%20AppleWebKit/600.7.12%20(KHTML,%20like%20Gecko)%20Version/8.0.7%20Safari/600.7.12&ip=190.93.245.15&h=70&w=300&maxd=30&floor=0.1&os=Mac%20OS%20X%2010_10_4&aid=123&pid=12")
 }
 
 object Lib {
