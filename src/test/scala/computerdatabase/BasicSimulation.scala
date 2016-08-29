@@ -11,9 +11,9 @@ import scala.util.Random
 class BasicSimulation extends Simulation {
 
   val httpConf = http
-        .baseURL("http://localhost:8080")
-//    .baseURL("http://209.205.219.186:80")
-//    .baseURL("http://209.205.219.58:8080")
+    .baseURL("http://localhost:8080")
+    //    .baseURL("http://209.205.219.186:80")
+    //    .baseURL("http://209.205.219.58:8080")
     .contentTypeHeader("application/json")
     .maxConnectionsPerHost(300)
     .shareConnections
@@ -50,12 +50,18 @@ object AdRequest {
 
   val adRequest =
     feed(feeder)
-      .exec(
-        http(s"Request")
+      .doIfEqualsOrElse("${json}", "") {
+        exec(
+          http(s"non-Rtb")
+            .get("${query}")
+        )
+      } {
+        exec(
+        http(s"Rtb")
           .post("${query}")
           .body(StringBody("${json}"))
-      )
-
+        )
+      }
 }
 
 object Lib {
@@ -69,7 +75,7 @@ object Lib {
 
   def getFeeder(limit: Int = 1000) =
     (1 to limit).map { _ =>
-      if (isRtb)
+      if (isRtb())
         Map(
           "json" -> adRequests.next(),
           "query" -> s"/bidder?sid=$getRandomSource"
