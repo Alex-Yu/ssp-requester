@@ -11,14 +11,14 @@ import scala.util.Random
 class BasicSimulation extends Simulation {
 
   val httpConf = http
-//        .baseURL("http://localhost:8080")
-    .baseURL("http://209.205.219.186:80")
+        .baseURL("http://localhost:8080")
+//    .baseURL("http://209.205.219.186:80")
 //    .baseURL("http://209.205.219.58:8080")
     .contentTypeHeader("application/json")
     .maxConnectionsPerHost(300)
     .shareConnections
 
-  val rps = 10000
+  val rps = 1000
   val extra = rps * 1.1
   val halfRps = rps / 2
   val quartRps = rps / 4
@@ -83,7 +83,8 @@ object Lib {
 
   def getRandomSource = sources(r.nextInt(sourcesQtty))
 
-  private def isRtb = r.nextBoolean()
+  private def isRtb(share: Int = 50) =
+    share > 0 && r.nextInt(101) <= share
 
 }
 
