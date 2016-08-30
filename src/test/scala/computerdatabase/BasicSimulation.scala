@@ -11,14 +11,14 @@ import scala.util.Random
 class BasicSimulation extends Simulation {
 
   val httpConf = http
-    .baseURL("http://localhost:8080")
+//    .baseURL("http://localhost:8080")
     //    .baseURL("http://209.205.219.186:80")
-    //    .baseURL("http://209.205.219.58:8080")
+        .baseURL("http://209.205.219.58:8080")
     .contentTypeHeader("application/json")
     .maxConnectionsPerHost(300)
     .shareConnections
 
-  val rps = 1000
+  val rps = 38000
   val extra = rps * 1.1
   val halfRps = rps / 2
   val quartRps = rps / 4
@@ -75,7 +75,7 @@ object Lib {
 
   def getFeeder(limit: Int = 1000) =
     (1 to limit).map { _ =>
-      if (isRtb())
+      if (isRtb(100))
         Map(
           "json" -> adRequests.next(),
           "query" -> s"/bidder?sid=$getRandomSource"
