@@ -13,7 +13,8 @@ class BasicSimulation extends Simulation {
   val httpConf = http
 //    .baseURL("http://localhost:8080")
     //    .baseURL("http://209.205.219.186:80")
-        .baseURL("http://209.205.219.58:8080")
+//        .baseURL("http://209.205.219.58:8080")
+        .baseURL("http://aux-log.videe.tv")
     .contentTypeHeader("application/json")
     .maxConnectionsPerHost(300)
     .shareConnections
