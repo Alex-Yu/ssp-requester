@@ -76,7 +76,7 @@ object Lib {
 
   def getFeeder(limit: Int = 1000) =
     (1 to limit).map { _ =>
-      if (isRtb(100))
+      if (isRtb(0))
         Map(
           "json" -> adRequests.next(),
           "query" -> s"/bidder?sid=$getRandomSource"
