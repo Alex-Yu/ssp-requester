@@ -12,11 +12,11 @@ class BasicSimulation extends Simulation {
 
   val httpConf = http
 //    .baseURL("http://localhost:8080")
-    //    .baseURL("http://209.205.219.186:80")
+//        .baseURL("http://209.205.219.186:80")
 //        .baseURL("http://209.205.219.58:8080")
         .baseURL("http://aux-log.videe.tv")
     .contentTypeHeader("application/json")
-    .maxConnectionsPerHost(300)
+    .maxConnectionsPerHost(600)
     .shareConnections
 
   val rps = 38000
@@ -84,11 +84,16 @@ object Lib {
       else
         Map(
           "json" -> "",
-          "query" -> s"/bidder?&sid=$getRandomSource&pubId=15&pubName=test&domain=google.com&ua=Mozilla/6.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_10_4)%20AppleWebKit/600.7.12%20(KHTML,%20like%20Gecko)%20Version/8.0.7%20Safari/600.7.12&ip=190.93.245.15&h=70&w=300&maxd=30&floor=0.1&os=Mac%20OS%20X%2010_10_4&aid=123&pid=12"
+          "query" -> s"/bidder?&sid=$getRandomSource&pubId=15&pubName=test&domain=google.com&ua=Mozilla/6.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_10_4)%20AppleWebKit/600.7.12%20(KHTML,%20like%20Gecko)%20Version/8.0.7%20Safari/600.7.12&ip=$getRandomIp&h=70&w=300&maxd=30&floor=0.1&os=Mac%20OS%20X%2010_10_4&aid=123&pid=12&adid=100500"
         )
     }.toArray
 
   def getRandomSource = sources(r.nextInt(sourcesQtty))
+
+  def getRandomIp = {
+    def q = r.nextInt(253) + 1
+    s"$q.$q.$q.$q"
+  }
 
   private def isRtb(share: Int = 50) =
     share > 0 && r.nextInt(101) <= share
