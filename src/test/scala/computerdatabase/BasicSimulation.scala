@@ -19,7 +19,7 @@ class BasicSimulation extends Simulation {
     .maxConnectionsPerHost(600)
     .shareConnections
 
-  val rps = 38000
+  val rps = 20000
   val extra = rps * 1.1
   val halfRps = rps / 2
   val quartRps = rps / 4
@@ -27,7 +27,9 @@ class BasicSimulation extends Simulation {
 
   val firstScn = scenario("load").exec(AdRequest.adRequest)
     .inject(
-      rampUsersPerSec(1) to quartRps during (10 seconds),
+      rampUsersPerSec(1) to rps during (10 seconds),
+      constantUsersPerSec(rps) during (240 seconds)
+      /*rampUsersPerSec(1) to quartRps during (10 seconds),
       constantUsersPerSec(quartRps) during (50 seconds),
       rampUsersPerSec(quartRps) to halfRps during (10 seconds),
       constantUsersPerSec(halfRps) during (50 seconds),
@@ -37,7 +39,7 @@ class BasicSimulation extends Simulation {
       constantUsersPerSec(rps) during (90 seconds),
       rampUsersPerSec(rps) to extra during (10 seconds),
       constantUsersPerSec(extra) during (90 seconds),
-      nothingFor(5 seconds)
+      nothingFor(5 seconds)*/
     ).protocols(httpConf)
 
   setUp(
