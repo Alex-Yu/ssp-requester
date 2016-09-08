@@ -12,30 +12,31 @@ class BasicSimulation extends Simulation {
 
   val httpConf = http
     //    .baseURL("http://localhost:8080")
-    .baseURL("http://209.205.218.34:8090")
+     .baseURL("http://209.205.218.34:8090")
     //        .baseURL("http://209.205.219.58:8080")
     //        .baseURL("http://aux-log.videe.tv")
     .contentTypeHeader("application/json")
     .maxConnectionsPerHost(15000)
     .shareConnections
 
-  val rps = 60000
+  val rps = 22000
+  val halfRps = rps / 2
+  val hqRps = rps * 0.75
+  val extra = rps * 1.1
 
   val firstScn = scenario("load").exec(AdRequest.adRequest)
     .inject(
-      rampUsersPerSec(1) to rps during (10 seconds),
-      constantUsersPerSec(rps) during (240 seconds)
-      /*rampUsersPerSec(1) to quartRps during (10 seconds),
-      constantUsersPerSec(quartRps) during (50 seconds),
-      rampUsersPerSec(quartRps) to halfRps during (10 seconds),
+      /*rampUsersPerSec(1) to rps during (10 seconds),
+      constantUsersPerSec(rps) during (240 seconds)*/
+      rampUsersPerSec(1) to halfRps during (10 seconds),
       constantUsersPerSec(halfRps) during (50 seconds),
       rampUsersPerSec(halfRps) to hqRps during (10 seconds),
       constantUsersPerSec(hqRps) during (50 seconds),
       rampUsersPerSec(hqRps) to rps during (10 seconds),
-      constantUsersPerSec(rps) during (90 seconds),
+      constantUsersPerSec(rps) during (60 seconds),
       rampUsersPerSec(rps) to extra during (10 seconds),
-      constantUsersPerSec(extra) during (90 seconds),
-      nothingFor(5 seconds)*/
+      constantUsersPerSec(extra) during (60 seconds),
+      nothingFor(5 seconds)
     ).protocols(httpConf)
 
   setUp(
@@ -75,7 +76,42 @@ object Lib {
   def getFeeder(limit: Int = 1000) =
     (1 to limit).map { _ =>
       Map(
-        "json" -> "",
+        "json" -> """
+{
+  "id": "1234567893",
+  "at": 1,
+  "tmax": 500,
+  "imp": [
+    {
+      "id": "${AUCION_ID}-1",
+      "bidfloor": 0.02,
+      "video": {
+        "mimes": [
+          "video/mp4",
+          "application/x-shockwave-flash"
+        ],
+        "h":               480,
+        "w":               640,
+        "maxduration":     30
+      }
+    }
+  ],
+  "site": {
+    "domain": "maps.google.com",
+    "publisher": {
+      "id": "1a",
+      "name": "Publisher A"
+    }
+  },
+  "device": {
+    "ip": "8.8.8.8",
+    "ua": "Mozilla/5.0 (X11; Linux i586; rv:31.0) Gecko/20100101 Firefox/31.0",
+    "os": "Linux",
+    "js": 1,
+    "geo": {"country": "gb"}
+  }
+}
+""".stringify,
         "query" -> s"/bidresponse"
       )
     }.toArray
