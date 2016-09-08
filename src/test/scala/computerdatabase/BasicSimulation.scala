@@ -12,14 +12,14 @@ class BasicSimulation extends Simulation {
 
   val httpConf = http
     //    .baseURL("http://localhost:8080")
-     .baseURL("http://209.205.218.34:8090")
+     .baseURL("http://ads8.vertamedia.com")
     //        .baseURL("http://209.205.219.58:8080")
     //        .baseURL("http://aux-log.videe.tv")
     .contentTypeHeader("application/json")
-    .maxConnectionsPerHost(15000)
+    .maxConnectionsPerHost(300)
     .shareConnections
 
-  val rps = 22000
+  val rps = 30000
   val halfRps = rps / 2
   val hqRps = rps * 0.75
   val extra = rps * 1.1
@@ -33,10 +33,10 @@ class BasicSimulation extends Simulation {
       rampUsersPerSec(halfRps) to hqRps during (10 seconds),
       constantUsersPerSec(hqRps) during (50 seconds),
       rampUsersPerSec(hqRps) to rps during (10 seconds),
-      constantUsersPerSec(rps) during (60 seconds),
+      constantUsersPerSec(rps) during (60 seconds)/*,
       rampUsersPerSec(rps) to extra during (10 seconds),
       constantUsersPerSec(extra) during (60 seconds),
-      nothingFor(5 seconds)
+      nothingFor(5 seconds)*/
     ).protocols(httpConf)
 
   setUp(
@@ -111,8 +111,8 @@ object Lib {
     "geo": {"country": "gb"}
   }
 }
-""".stringify,
-        "query" -> s"/bidresponse"
+""",
+        "query" -> s"/bid-test/"
       )
     }.toArray
 
