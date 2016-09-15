@@ -11,16 +11,18 @@ import scala.util.Random
 class BasicSimulation extends Simulation {
 
   val httpConf = http
-//    .baseURL("http://localhost:8080")
-//        .baseURL("http://209.205.219.186:80")
-//        .baseURL("http://209.205.219.58:8080")
-        .baseURL("http://aux-log.videe.tv")
+    //    .baseURL("http://localhost:8080")
+    //        .baseURL("http://209.205.219.186:80")
+    //        .baseURL("http://10.10.49.112:8080")
+    //        .baseURL("http://209.205.219.218:8080")
+    .baseURL("http://10.10.49.113:8080")
+    //        .baseURL("http://aux-log.videe.tv")
     .contentTypeHeader("application/json")
-    .maxConnectionsPerHost(600)
+    .maxConnectionsPerHost(300)
     .shareConnections
 
-  val rps = 20000
-  val extra = rps * 1.1
+  val rps = 2500
+  val extra = (rps * 1.15).toInt
   val halfRps = rps / 2
   val quartRps = rps / 4
   val hqRps = halfRps + quartRps
@@ -28,8 +30,10 @@ class BasicSimulation extends Simulation {
   val firstScn = scenario("load").exec(AdRequest.adRequest)
     .inject(
       rampUsersPerSec(1) to rps during (10 seconds),
-      constantUsersPerSec(rps) during (240 seconds)
-      /*rampUsersPerSec(1) to quartRps during (10 seconds),
+      constantUsersPerSec(rps) during (120 seconds)/*,
+      rampUsersPerSec(rps) to extra during (10 seconds),
+      constantUsersPerSec(extra) during (60 seconds)
+      rampUsersPerSec(1) to quartRps during (10 seconds),
       constantUsersPerSec(quartRps) during (50 seconds),
       rampUsersPerSec(quartRps) to halfRps during (10 seconds),
       constantUsersPerSec(halfRps) during (50 seconds),
@@ -44,6 +48,11 @@ class BasicSimulation extends Simulation {
 
   setUp(
     firstScn
+  ).throttle(
+    reachRps(rps) in (10 seconds),
+    holdFor(1 minute),
+    reachRps(extra) in (10 seconds),
+    holdFor(1 minute)
   )
 
 }
@@ -60,18 +69,19 @@ object AdRequest {
         )
       } {
         exec(
-        http(s"Rtb")
-          .post("${query}")
-          .body(StringBody("${json}"))
+          http(s"Rtb")
+            .post("${query}")
+            .body(StringBody("${json}"))
         )
       }
 }
+
 
 object Lib {
 
   private val r = Random
 
-  private val adRequests = Source.fromFile("output_all.log").getLines()
+  private lazy val adRequests = Source.fromFile("output_all.log").getLines()
 
   private val sources = Source.fromFile("sources.txt").getLines().filter(_.nonEmpty).toArray
   private val sourcesQtty = sources.length
@@ -86,7 +96,7 @@ object Lib {
       else
         Map(
           "json" -> "",
-          "query" -> s"/bidder?&sid=$getRandomSource&pubId=15&pubName=test&domain=google.com&ua=Mozilla/6.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_10_4)%20AppleWebKit/600.7.12%20(KHTML,%20like%20Gecko)%20Version/8.0.7%20Safari/600.7.12&ip=$getRandomIp&h=70&w=300&maxd=30&floor=0.1&os=Mac%20OS%20X%2010_10_4&aid=123&pid=12&adid=100500"
+          "query" -> s"/bidder?&sid=$getRandomSource&pubId=15&pubName=test&domain=google.com&ua=Mozilla/6.0%20(Macintosh;%20Intel%20Mac%20OS%20X%2010_10_4)%20AppleWebKit/600.7.12%20(KHTML,%20like%20Gecko)%20Version/8.0.7%20Safari/600.7.12&ip=$getRandomIp&h=70&w=300&maxd=30&floor=0.1&os=Mac%20OS%20X%2010_10_4&aid=123&pid=12i&adid=100"
         )
     }.toArray
 
@@ -101,4 +111,3 @@ object Lib {
     share > 0 && r.nextInt(101) <= share
 
 }
-
